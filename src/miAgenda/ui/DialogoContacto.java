@@ -11,16 +11,17 @@ import miAgenda.servicio.ContactoServicio;
  *
  * @author Ben
  */
+// clase para el formulario de dialogo de contacto
 public class DialogoContacto extends javax.swing.JDialog {
-private Contacto contactoEditar = null;
+private Contacto contactoEditar = null;// variable para almacenar el contacto que se esta editando (si existe)
     /**
      * Creates new form DialogoContacto
      */
-    public DialogoContacto(java.awt.Frame parent, boolean modal) {
+    public DialogoContacto(java.awt.Frame parent, boolean modal) { // constructor del formulario
         super(parent, modal);
         initComponents();
     }
-       public void cargarContacto(Contacto c) {
+       public void cargarContacto(Contacto c) {// metodo para cargar los datos de un contacto en los campos del formulario
         this.contactoEditar = c;
         txtNombres.setText(c.getNombres());
         txtApellidos.setText(c.getApellidos());
@@ -90,9 +91,19 @@ private Contacto contactoEditar = null;
 
         jButton5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jButton5.setText("Cancelar Operacion");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jButton6.setText("Ver Lista de Usuario");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -183,6 +194,7 @@ private Contacto contactoEditar = null;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+// accion cuando se presiona el boton guardar usuario
     private void btnGuardarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarUsuarioActionPerformed
        if (txtNombres.getText().trim().isEmpty() ||
     txtApellidos.getText().trim().isEmpty() ||
@@ -202,23 +214,33 @@ private Contacto contactoEditar = null;
     contacto.setDireccion(txtDireccion.getText());
     contacto.setEtiqueta(txtEtiqueta.getText());
 
-  ContactoServicio servicio = new ContactoServicio();
+  ContactoServicio servicio = new ContactoServicio();// instancia del servicio
 boolean exito;
 
-    if (contactoEditar != null) {
+    if (contactoEditar != null) { // verificar si es edicion o nuevo
     contacto.setId(contactoEditar.getId()); // ID a editar
     exito = servicio.actualizarContacto(contacto);
     } else {
         exito = servicio.guardarContacto(contacto);
     }
 
-    if (exito) {
+    if (exito) {// mostrar mensaje segun el resultado
         JOptionPane.showMessageDialog(this, "Contacto guardado correctamente.");
         this.dispose();
     } else {
         JOptionPane.showMessageDialog(this, "Error al guardar el contacto.");
     }
     }//GEN-LAST:event_btnGuardarUsuarioActionPerformed
+
+    // accion para el boton cancelar
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    // accion para el boton ver lista
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
