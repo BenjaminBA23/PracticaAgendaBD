@@ -279,7 +279,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAgregarEventoActionPerformed
 // accion para ver lista de eventos
     private void btnVerEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEventosActionPerformed
-        // TODO add your handling code here:
+         // Abrir la ventana para ver y agregar eventos
+    VentanaEventos venEve = new VentanaEventos(this,true);
+    venEve.setLocationRelativeTo(this);  // Centrar la ventana
+    venEve.setVisible(true);  // Hacer visible la ventana
+
     }//GEN-LAST:event_btnVerEventosActionPerformed
 
     /**
