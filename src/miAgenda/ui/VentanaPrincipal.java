@@ -4,6 +4,13 @@
  */
 package miAgenda.ui;
 
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import miAgenda.modelo.Contacto;
+import miAgenda.servicio.ContactoServicio;
+
 /**
  *
  * @author Ben
@@ -15,7 +22,36 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
+        DefaultTableModel modelo = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"ID", "Nombres", "Apellidos", "Teléfono", "Email", "Dirección", "Etiqueta"});
+        tablaContactos.setModel(modelo);
+        
+        // Habilitar filtrado
+    TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(modelo);
+    tablaContactos.setRowSorter(sorter);
+    
+    // Cargar los contactos desde la base de datos
+    cargarContactos();
     }
+    
+    private void cargarContactos() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaContactos.getModel();
+    modelo.setRowCount(0); // Limpia la tabla
+
+    ContactoServicio servicio = new ContactoServicio();
+    for (Contacto c : servicio.listarContactos()) {
+        modelo.addRow(new Object[]{
+            c.getId(),
+            c.getNombres(),
+            c.getApellidos(),
+            c.getTelefono(),
+            c.getEmail(),
+            c.getDireccion(),
+            c.getEtiqueta()
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,7 +64,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tablaContactos = new javax.swing.JTable();
         btnNuevoContacto = new javax.swing.JButton();
         btnEditarUsuario = new javax.swing.JButton();
         btnEliminarUsuario = new javax.swing.JButton();
@@ -42,7 +78,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tablaContactos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -53,22 +89,53 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tablaContactos);
 
         btnNuevoContacto.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnNuevoContacto.setText("Agregar Usuario");
+        btnNuevoContacto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoContactoActionPerformed(evt);
+            }
+        });
 
         btnEditarUsuario.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnEditarUsuario.setText("Editar Usuario");
+        btnEditarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarUsuarioActionPerformed(evt);
+            }
+        });
 
         btnEliminarUsuario.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnEliminarUsuario.setText("Eliminar Usuario");
+        btnEliminarUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarUsuarioActionPerformed(evt);
+            }
+        });
+
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
+        });
 
         btnVerEventos.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnVerEventos.setText("Ver Eventos");
+        btnVerEventos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerEventosActionPerformed(evt);
+            }
+        });
 
         btnAgregarEvento.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         btnAgregarEvento.setText("Agregar Eventos");
+        btnAgregarEvento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarEventoActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         jLabel1.setText("Filtrado de Usuarios:");
@@ -136,6 +203,84 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnNuevoContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoContactoActionPerformed
+         DialogoContacto dialogo = new DialogoContacto(this, true);
+          dialogo.setLocationRelativeTo(this);
+          dialogo.setVisible(true);
+          cargarContactos(); // Para actualizar tabla después de cerrar el diálogo
+    }//GEN-LAST:event_btnNuevoContactoActionPerformed
+
+    private void btnEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuarioActionPerformed
+        int fila = tablaContactos.getSelectedRow();
+
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Por favor selecciona un contacto a eliminar.");
+        return;
+    }
+
+    int id = (int) tablaContactos.getValueAt(fila, 0); // columna 0 = ID
+
+    int confirm = JOptionPane.showConfirmDialog(this,
+        "¿Estás seguro de que deseas eliminar este contacto?",
+        "Confirmar eliminación",
+        JOptionPane.YES_NO_OPTION);
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        ContactoServicio servicio = new ContactoServicio();
+        if (servicio.eliminarContacto(id)) {
+            JOptionPane.showMessageDialog(this, "Contacto eliminado correctamente.");
+            cargarContactos();
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al eliminar el contacto.");
+        }
+    }
+    }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
+
+    private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
+        int fila = tablaContactos.getSelectedRow();
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona un contacto para editar.");
+        return;
+    }
+
+    Contacto c = new Contacto();
+    c.setId((int) tablaContactos.getValueAt(fila, 0));
+    c.setNombres((String) tablaContactos.getValueAt(fila, 1));
+    c.setApellidos((String) tablaContactos.getValueAt(fila, 2));
+    c.setTelefono((String) tablaContactos.getValueAt(fila, 3));
+    c.setEmail((String) tablaContactos.getValueAt(fila, 4));
+    c.setDireccion((String) tablaContactos.getValueAt(fila, 5));
+    c.setEtiqueta((String) tablaContactos.getValueAt(fila, 6));
+
+    DialogoContacto dialogo = new DialogoContacto(this, true);
+    dialogo.cargarContacto(c); // ← Aquí enviamos el contacto a editar
+    dialogo.setLocationRelativeTo(this);
+    dialogo.setVisible(true);
+
+    cargarContactos(); // Recarga la tabla al cerrar
+    }//GEN-LAST:event_btnEditarUsuarioActionPerformed
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+    String texto = txtBuscar.getText();
+    TableRowSorter sorter = (TableRowSorter) tablaContactos.getRowSorter();
+    
+    if (texto.trim().length() == 0) {
+        sorter.setRowFilter(null); // Sin filtro
+    } else {
+        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto)); // Filtrado case-insensitive
+    }
+    }//GEN-LAST:event_txtBuscarKeyReleased
+
+    private void btnAgregarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEventoActionPerformed
+       DialogoEvento dialogoEvento = new DialogoEvento(this,true);
+       dialogoEvento.setLocationRelativeTo(this);
+       dialogoEvento.setVisible(true);
+    }//GEN-LAST:event_btnAgregarEventoActionPerformed
+
+    private void btnVerEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEventosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnVerEventosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -180,7 +325,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tablaContactos;
     private javax.swing.JTextField txtBuscar;
     // End of variables declaration//GEN-END:variables
 }

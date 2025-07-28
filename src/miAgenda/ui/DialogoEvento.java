@@ -4,6 +4,16 @@
  */
 package miAgenda.ui;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import javax.swing.JOptionPane;
+import miAgenda.modelo.Contacto;
+import miAgenda.modelo.Evento;
+import miAgenda.servicio.ContactoServicio;
+import miAgenda.servicio.EventoServicio;
+
 /**
  *
  * @author Ben
@@ -16,6 +26,23 @@ public class DialogoEvento extends javax.swing.JDialog {
     public DialogoEvento(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        crearComboContacto(); // Creamos nuestro JComboBox<Contacto>
+        cargarContactos();    // Llenamos el combo con los contactos
+    }
+    
+        // Crea un JComboBox<Contacto> y lo agrega al formulario
+    private void crearComboContacto() {
+        cbContactoReal = new javax.swing.JComboBox<>();
+        cbContactoReal.setBounds(100, 90, 180, 25); // Ajusta según tu layout
+        getContentPane().add(cbContactoReal);
+    }
+    
+      private void cargarContactos() {
+        cbContactoReal.removeAllItems();
+        ContactoServicio servicio = new ContactoServicio();
+        for (Contacto c : servicio.listarContactos()) {
+            cbContactoReal.addItem(c);
+        }
     }
 
     /**
@@ -57,6 +84,11 @@ public class DialogoEvento extends javax.swing.JDialog {
         jLabel3.setText("Descripcion:");
 
         btnGuardarEvento.setText("Guardar Evento");
+        btnGuardarEvento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarEventoActionPerformed(evt);
+            }
+        });
 
         btnSalir.setText("Salir");
 
@@ -118,6 +150,44 @@ public class DialogoEvento extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnGuardarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEventoActionPerformed
+        try {
+    String fechaTexto = txtFecha.getText().trim();
+    String horaTexto = txtHora.getText().trim();
+    String descripcion = txtDescripcion.getText().trim();
+    String ubicacion = txtUbicacion.getText().trim();
+    Contacto contactoSeleccionado = (Contacto) cbContactoReal.getSelectedItem();
+
+    if (fechaTexto.isEmpty() || horaTexto.isEmpty() || descripcion.isEmpty() || ubicacion.isEmpty() || contactoSeleccionado == null) {
+        JOptionPane.showMessageDialog(this, "Por favor complete todos los campos antes de guardar.");
+        return;
+    }
+
+    LocalTime hora = LocalTime.parse(txtHora.getText().trim(), DateTimeFormatter.ofPattern("HH:mm"));
+    LocalDate fecha = LocalDate.parse(txtFecha.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+    Evento evento = new Evento();
+    evento.setFecha(fecha);
+    evento.setHora(hora);
+    evento.setDescripcion(descripcion);
+    evento.setUbicacion(ubicacion);
+    evento.setContactoId(contactoSeleccionado.getId());
+
+    EventoServicio servicio = new EventoServicio();
+    if (servicio.guardarEvento(evento)) {
+        JOptionPane.showMessageDialog(this, "Evento guardado correctamente.");
+        this.dispose();
+    } else {
+        JOptionPane.showMessageDialog(this, "Error al guardar el evento.");
+    }
+
+        } catch (DateTimeParseException e) {
+            JOptionPane.showMessageDialog(this, "Formato de fecha u hora inválido. Usa AAAA-MM-DD y HH:MM");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnGuardarEventoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -136,4 +206,6 @@ public class DialogoEvento extends javax.swing.JDialog {
     private javax.swing.JTextField txtHora;
     private javax.swing.JTextField txtUbicacion;
     // End of variables declaration//GEN-END:variables
+
+private javax.swing.JComboBox<miAgenda.modelo.Contacto> cbContactoReal;
 }

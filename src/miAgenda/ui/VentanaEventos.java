@@ -4,6 +4,12 @@
  */
 package miAgenda.ui;
 
+import javax.swing.table.DefaultTableModel;
+import miAgenda.modelo.Contacto;
+import miAgenda.modelo.Evento;
+import miAgenda.servicio.ContactoServicio;
+import miAgenda.servicio.EventoServicio;
+
 /**
  *
  * @author Ben
@@ -16,7 +22,42 @@ public class VentanaEventos extends javax.swing.JDialog {
     public VentanaEventos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+         // Configurar columnas de la tabla
+    DefaultTableModel modelo = new DefaultTableModel(
+     new Object[][]{},
+     new String[]{"ID", "Fecha", "Hora", "Descripción", "Ubicación", "Contacto"});
+     tablaEventos.setModel(modelo);
+
+    // Cargar los datos desde la BD
+    cargarEventos();
     }
+    
+    private void cargarEventos() {
+    DefaultTableModel modelo = (DefaultTableModel) tablaEventos.getModel();
+    modelo.setRowCount(0); // Limpiar tabla
+
+    EventoServicio eventoServicio = new EventoServicio();
+    ContactoServicio contactoServicio = new ContactoServicio();
+
+    for (Evento e : eventoServicio.listarEventos()) {
+        // Obtener el contacto correspondiente al ID
+        Contacto contacto = contactoServicio.buscarPorId(e.getContactoId());
+
+        // Si se encuentra, usar su nombre; si no, mostrar el ID
+        String nombreContacto = contacto != null
+            ? contacto.getNombres() + " " + contacto.getApellidos()
+            : "ID: " + e.getContactoId();
+
+        modelo.addRow(new Object[]{
+            e.getId(),
+            e.getFecha(),
+            e.getHora(),
+            e.getDescripcion(),
+            e.getUbicacion(),
+            nombreContacto
+        });
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
