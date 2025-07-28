@@ -234,12 +234,13 @@ boolean exito;
 
     // accion para el boton cancelar
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     // accion para el boton ver lista
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+      //  ventanalistacontactos ventana = new ventanalistacontactos();
+    //ventana.setvisible(true);
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**

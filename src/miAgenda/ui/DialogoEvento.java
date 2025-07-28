@@ -18,12 +18,12 @@ import miAgenda.servicio.EventoServicio;
  *
  * @author Ben
  */
-public class DialogoEvento extends javax.swing.JDialog {
+public class DialogoEvento extends javax.swing.JDialog {// clase para el formulario de creacion de eventos
 
     /**
      * Creates new form DialogoEvento
      */
-    public DialogoEvento(java.awt.Frame parent, boolean modal) {
+    public DialogoEvento(java.awt.Frame parent, boolean modal) {// constructor del formulario
         super(parent, modal);
         initComponents();
         crearComboContacto(); // Creamos nuestro JComboBox<Contacto>
@@ -37,7 +37,7 @@ public class DialogoEvento extends javax.swing.JDialog {
         getContentPane().add(cbContactoReal);
     }
     
-      private void cargarContactos() {
+      private void cargarContactos() {// carga los contactos desde el servicio y los agrega al jcombobox
         cbContactoReal.removeAllItems();
         ContactoServicio servicio = new ContactoServicio();
         for (Contacto c : servicio.listarContactos()) {
@@ -157,22 +157,22 @@ public class DialogoEvento extends javax.swing.JDialog {
     String descripcion = txtDescripcion.getText().trim();
     String ubicacion = txtUbicacion.getText().trim();
     Contacto contactoSeleccionado = (Contacto) cbContactoReal.getSelectedItem();
-
+// validacion de campos
     if (fechaTexto.isEmpty() || horaTexto.isEmpty() || descripcion.isEmpty() || ubicacion.isEmpty() || contactoSeleccionado == null) {
         JOptionPane.showMessageDialog(this, "Por favor complete todos los campos antes de guardar.");
         return;
     }
-
+// parsear fecha y hora
     LocalTime hora = LocalTime.parse(txtHora.getText().trim(), DateTimeFormatter.ofPattern("HH:mm"));
     LocalDate fecha = LocalDate.parse(txtFecha.getText().trim(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
+ // crear el evento
     Evento evento = new Evento();
     evento.setFecha(fecha);
     evento.setHora(hora);
     evento.setDescripcion(descripcion);
     evento.setUbicacion(ubicacion);
     evento.setContactoId(contactoSeleccionado.getId());
-
+ // guardar el evento
     EventoServicio servicio = new EventoServicio();
     if (servicio.guardarEvento(evento)) {
         JOptionPane.showMessageDialog(this, "Evento guardado correctamente.");
