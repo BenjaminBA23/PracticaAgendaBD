@@ -14,12 +14,12 @@ import miAgenda.servicio.EventoServicio;
  *
  * @author Ben
  */
-public class VentanaEventos extends javax.swing.JDialog {
+public class VentanaEventos extends javax.swing.JDialog {// clase para mostrar la ventana con la lista de eventos
 
     /**
      * Creates new form VentanaEventos
      */
-    public VentanaEventos(java.awt.Frame parent, boolean modal) {
+    public VentanaEventos(java.awt.Frame parent, boolean modal) {// constructor de la ventana
         super(parent, modal);
         initComponents();
          // Configurar columnas de la tabla
@@ -32,13 +32,13 @@ public class VentanaEventos extends javax.swing.JDialog {
     cargarEventos();
     }
     
-    private void cargarEventos() {
+    private void cargarEventos() {// metodo para cargar los eventos desde el servicio
     DefaultTableModel modelo = (DefaultTableModel) tablaEventos.getModel();
     modelo.setRowCount(0); // Limpiar tabla
 
     EventoServicio eventoServicio = new EventoServicio();
     ContactoServicio contactoServicio = new ContactoServicio();
-
+// recorrer la lista de eventos y agregarlos a la tabla
     for (Evento e : eventoServicio.listarEventos()) {
         // Obtener el contacto correspondiente al ID
         Contacto contacto = contactoServicio.buscarPorId(e.getContactoId());
@@ -47,7 +47,7 @@ public class VentanaEventos extends javax.swing.JDialog {
         String nombreContacto = contacto != null
             ? contacto.getNombres() + " " + contacto.getApellidos()
             : "ID: " + e.getContactoId();
-
+ // agregar una fila a la tabla con los datos del evento
         modelo.addRow(new Object[]{
             e.getId(),
             e.getFecha(),

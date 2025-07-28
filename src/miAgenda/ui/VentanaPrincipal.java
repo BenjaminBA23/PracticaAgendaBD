@@ -22,7 +22,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
      */
     public VentanaPrincipal() {
         initComponents();
-        DefaultTableModel modelo = new DefaultTableModel(
+        DefaultTableModel modelo = new DefaultTableModel(// crear modelo de tabla para contactos
         new Object[][]{},
         new String[]{"ID", "Nombres", "Apellidos", "Teléfono", "Email", "Dirección", "Etiqueta"});
         tablaContactos.setModel(modelo);
@@ -34,7 +34,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // Cargar los contactos desde la base de datos
     cargarContactos();
     }
-    
+    // metodo para cargar los contactos a la tabla
     private void cargarContactos() {
     DefaultTableModel modelo = (DefaultTableModel) tablaContactos.getModel();
     modelo.setRowCount(0); // Limpia la tabla
@@ -204,14 +204,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoContactoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoContactoActionPerformed
-         DialogoContacto dialogo = new DialogoContacto(this, true);
+         DialogoContacto dialogo = new DialogoContacto(this, true);// accion para agregar un nuevo contacto
+
           dialogo.setLocationRelativeTo(this);
           dialogo.setVisible(true);
           cargarContactos(); // Para actualizar tabla después de cerrar el diálogo
     }//GEN-LAST:event_btnNuevoContactoActionPerformed
 
     private void btnEliminarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarUsuarioActionPerformed
-        int fila = tablaContactos.getSelectedRow();
+        int fila = tablaContactos.getSelectedRow();// accion para eliminar un contacto seleccionado
 
     if (fila == -1) {
         JOptionPane.showMessageDialog(this, "Por favor selecciona un contacto a eliminar.");
@@ -237,7 +238,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarUsuarioActionPerformed
 
     private void btnEditarUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarUsuarioActionPerformed
-        int fila = tablaContactos.getSelectedRow();
+        int fila = tablaContactos.getSelectedRow(); // accion para editar un contacto seleccionado
     if (fila == -1) {
         JOptionPane.showMessageDialog(this, "Selecciona un contacto para editar.");
         return;
@@ -270,13 +271,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto)); // Filtrado case-insensitive
     }
     }//GEN-LAST:event_txtBuscarKeyReleased
-
+// accion para abrir ventana de agregar evento
     private void btnAgregarEventoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarEventoActionPerformed
        DialogoEvento dialogoEvento = new DialogoEvento(this,true);
        dialogoEvento.setLocationRelativeTo(this);
        dialogoEvento.setVisible(true);
     }//GEN-LAST:event_btnAgregarEventoActionPerformed
-
+// accion para ver lista de eventos
     private void btnVerEventosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerEventosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnVerEventosActionPerformed
