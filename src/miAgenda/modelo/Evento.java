@@ -9,8 +9,9 @@ import java.time.LocalTime;
 
 /**
  *
- * @author Ben
+ * @author Alonso
  */
+//clase evento con sus debidos atributos 
 public class Evento {
     private int id;
     private LocalDate fecha;
@@ -19,7 +20,7 @@ public class Evento {
     private String ubicacion;
     private int contactoId;
 
-    // Getters y Setters
+    // metodos Getters y Setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

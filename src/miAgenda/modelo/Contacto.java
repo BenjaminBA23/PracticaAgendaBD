@@ -6,8 +6,9 @@ package miAgenda.modelo;
 
 /**
  *
- * @author Ben
+ * @author Alonso
  */
+//Clase contacto con sus debidos atributos 
 public class Contacto {
     private int id;
     private String nombres;
@@ -17,10 +18,10 @@ public class Contacto {
     private String direccion;
     private String etiqueta;
 
-    // Constructor vacío
+    //Aca tenemos un metodo constructor vacio 
     public Contacto() {}
 
-    // Constructor con parámetros
+    //Aca el constructor lleno 
     public Contacto(int id, String nombres, String apellidos, String telefono, String email, String direccion, String etiqueta) {
         this.id = id;
         this.nombres = nombres;
@@ -31,7 +32,7 @@ public class Contacto {
         this.etiqueta = etiqueta;
     }
 
-    // Getters y setters...
+    //Metodos getter y setters
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
@@ -52,7 +53,7 @@ public class Contacto {
 
     public String getEtiqueta() { return etiqueta; }
     public void setEtiqueta(String etiqueta) { this.etiqueta = etiqueta; }
-    
+    //Metodo toString 
     @Override
     public String toString() {
     return nombres + " " + apellidos;
