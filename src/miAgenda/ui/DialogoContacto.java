@@ -239,8 +239,11 @@ boolean exito;
 
     // accion para el boton ver lista
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-      //  ventanalistacontactos ventana = new ventanalistacontactos();
-    //ventana.setvisible(true);
+       // Recargar la ventana principal, si es necesario.
+    this.setVisible(false); // Oculta la ventana actual
+    VentanaPrincipal nuevaVentana = new VentanaPrincipal(); // Crea una nueva instancia
+    nuevaVentana.setLocationRelativeTo(this); // Centra la ventana nueva
+    nuevaVentana.setVisible(true); // Muestra la nueva ventana
     }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
